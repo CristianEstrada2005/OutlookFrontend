@@ -49,11 +49,12 @@ export function CategoryView({ category, onBack }: CategoryViewProps) {
           const contactsFromCategory = data[category.name] || [];
           const mappedContacts = contactsFromCategory.map((c: any, idx: number) => ({
             id: c.id || idx.toString(),
-            name: c.displayName || "Sin nombre",
-            email: c.emailAddresses?.[0]?.address || "Sin email",
-            phone: c.mobilePhone || c.businessPhones?.[0] || "",
-            department: c.department || "",
+            name: c.nombre || "Sin nombre",
+            email: c.correo || "Sin email",
+            phone: "",
+            department: "",
           }));
+
           setContacts(mappedContacts);
         } else {
           console.error("Error al cargar contactos desde la API");
