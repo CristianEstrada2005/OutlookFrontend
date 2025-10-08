@@ -11,7 +11,7 @@ import {
   Phone,
   User
 } from "lucide-react";
-
+// 🔹 Definición de tipos
 interface Contact {
   id: string;
   name: string;
