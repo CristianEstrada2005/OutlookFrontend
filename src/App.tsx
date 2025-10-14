@@ -26,10 +26,18 @@ export default function App() {
     setAppState("dashboard");
   };
 
-  const handleLogout = () => {
-    setAppState("login");
-    // opcional: también puedes agregar fetch a /logout en el backend
-  };
+const handleLogout = async () => {
+  try {
+    await fetch("http://localhost:5000/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (error) {
+    console.error("Error al cerrar sesión:", error);
+  } finally {
+    setAppState("login"); // 👈 Regresa a la pantalla de login
+  }
+};
 
   const renderCurrentScreen = () => {
     switch (appState) {

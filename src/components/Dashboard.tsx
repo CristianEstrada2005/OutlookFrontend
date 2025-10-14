@@ -92,17 +92,27 @@ export function Dashboard({ onLogout }: DashboardProps) {
     setActiveView("category");
   };
 
-  // 🔹 Cerrar sesión
   const handleLogout = async () => {
-    try {
-      // Si más adelante agregas un endpoint de logout, puedes usarlo aquí
-      if (onLogout) onLogout();
-      window.location.href = "/";
-    } catch (err) {
-      console.error("Error al cerrar sesión:", err);
-      window.location.href = "/";
+  try {
+    await fetch("http://localhost:5000/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (error) {
+    console.error("Error al cerrar sesión:", error);
+  } finally {
+    localStorage.clear();
+    sessionStorage.clear();
+
+    if (onLogout) {
+      onLogout(); // 👈 Llama la función del App.tsx que cambia el estado a "login"
+    } else {
+      window.location.href = "/"; // Fallback por si no existe prop
     }
-  };
+  }
+};
+
+
 
   // 🔹 Renderiza contenido según vista activa
   const renderContent = () => {
