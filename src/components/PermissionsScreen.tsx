@@ -3,54 +3,48 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { CheckCircle, Mail, Users, Shield } from "lucide-react";
 
-interface PermissionsScreenProps {
-  onAccept?: () => void; // Hacemos opcional para manejar internamente la navegación
-}
-
-export function PermissionsScreen({ onAccept }: PermissionsScreenProps) {
+export function PermissionsScreen() {
   const [sessionActive, setSessionActive] = useState(false);
   const [checking, setChecking] = useState(true);
 
-  // 🔍 Verifica si hay una sesión activa (usuario autenticado)
- useEffect(() => {
-  const checkSession = async () => {
-    try {
-      const res = await fetch("https://outlookbackend.onrender.com/session-check", {
-        method: "GET",
-        credentials: "include", // 👈 envía cookies de sesión
-        headers: {
-          "Accept": "application/json",
-          "Cache-Control": "no-cache",
-        },
-      });
+  // 🔍 Verifica sesión activa
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await fetch("https://outlookbackend.onrender.com/session-check", {
+          method: "GET",
+          credentials: "include", // 👈 envía cookies de sesión
+          headers: {
+            "Accept": "application/json",
+            "Cache-Control": "no-cache",
+          },
+        });
 
-      if (!res.ok) {
-        console.warn("⚠️ Respuesta inesperada del servidor:", res.status);
-        return;
-      }
+        if (!res.ok) {
+          console.warn("⚠️ Respuesta inesperada:", res.status);
+          window.location.href = "/";
+          return;
+        }
 
-      const data = await res.json();
-
-      if (data?.token) {
-        setSessionActive(true);
-        console.log("✅ Sesión activa detectada en PermissionsScreen");
-      } else {
-        console.log("🚪 No hay sesión activa, redirigiendo...");
+        const data = await res.json();
+        if (data?.token) {
+          setSessionActive(true);
+          console.log("✅ Sesión activa detectada en PermissionsScreen");
+        } else {
+          console.log("🚪 No hay sesión activa, redirigiendo al login...");
+          window.location.href = "/";
+        }
+      } catch (err) {
+        console.error("❌ Error comprobando sesión:", err);
         window.location.href = "/";
+      } finally {
+        setChecking(false);
       }
-    } catch (err) {
-      console.error("❌ Error comprobando sesión:", err);
-      window.location.href = "/";
-    } finally {
-      setChecking(false);
-    }
-  };
+    };
 
-  checkSession();
-}, []);
+    checkSession();
+  }, []);
 
-
-  // 📦 Lista de permisos que la app requiere
   const permissions = [
     {
       icon: Mail,
@@ -70,12 +64,7 @@ export function PermissionsScreen({ onAccept }: PermissionsScreenProps) {
   ];
 
   const handleAccept = () => {
-    if (onAccept) {
-      onAccept();
-    } else {
-      // Si no se pasa una función externa, redirige por defecto al dashboard
-      window.location.href = "/dashboard";
-    }
+    window.location.href = "/dashboard";
   };
 
   if (checking) {
@@ -119,52 +108,31 @@ export function PermissionsScreen({ onAccept }: PermissionsScreenProps) {
               Permisos de Acceso
             </h1>
             <p className="text-slate-600">
-              Esta aplicación necesita los siguientes permisos para funcionar correctamente
+              Esta aplicación necesita los siguientes permisos para funcionar correctamente.
             </p>
           </div>
 
           <div className="space-y-4 mb-8">
-            {permissions.map((permission, index) => (
-              <div
-                key={index}
-                className="flex items-start space-x-4 p-4 bg-slate-50 rounded-lg"
-              >
+            {permissions.map((p, i) => (
+              <div key={i} className="flex items-start space-x-4 p-4 bg-slate-50 rounded-lg">
                 <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                  <permission.icon className="w-5 h-5 text-blue-600" />
+                  <p.icon className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-slate-800 mb-1">{permission.title}</h3>
-                  <p className="text-slate-600 text-sm">
-                    {permission.description}
-                  </p>
+                  <h3 className="text-slate-800 mb-1">{p.title}</h3>
+                  <p className="text-slate-600 text-sm">{p.description}</p>
                 </div>
                 <CheckCircle className="w-5 h-5 text-green-500 mt-1" />
               </div>
             ))}
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-blue-800">
-              <strong>Nota de seguridad:</strong> Todos los datos se procesan de forma segura
-              y no se almacenan permanentemente sin tu consentimiento.
-            </p>
-          </div>
-
-          <div className="flex space-x-4">
-            <Button
-              onClick={handleAccept}
-              className="flex-1 bg-[#0078d4] hover:bg-[#106ebe] text-white py-3"
-            >
-              Aceptar y continuar
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => (window.location.href = "/")}
-              className="px-6 py-3 border-slate-300 text-slate-600 hover:bg-slate-50"
-            >
-              Cancelar
-            </Button>
-          </div>
+          <Button
+            onClick={handleAccept}
+            className="w-full bg-[#0078d4] hover:bg-[#106ebe] text-white py-3"
+          >
+            Aceptar y continuar
+          </Button>
         </Card>
       </div>
     </div>
