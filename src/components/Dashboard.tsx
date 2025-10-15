@@ -30,7 +30,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const sessionRes = await fetch("http://localhost:5000/session-check", {
+        const sessionRes = await fetch("http://outlookbackend.onrender.com/session-check", {
           credentials: "include",
         });
         const sessionData = await sessionRes.json();
@@ -42,7 +42,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
         }
 
         // Cargar datos del usuario autenticado
-        const userRes = await fetch("http://localhost:5000/me", {
+        const userRes = await fetch("http://outlookbackend.onrender.com/me", {
           credentials: "include",
         });
         const userData = await userRes.json();
@@ -64,7 +64,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
   // 🔹 Cargar categorías desde backend
   const fetchCategories = async () => {
     try {
-      const res = await fetch("http://localhost:5000/contacts-by-category", {
+      const res = await fetch("http://outlookbackend.onrender.com/contacts-by-category", {
         method: "GET",
         credentials: "include",
       });
@@ -94,7 +94,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
   const handleLogout = async () => {
   try {
-    await fetch("http://localhost:5000/logout", {
+    await fetch("http://outlookbackend.onrender.com/logout", {
       method: "POST",
       credentials: "include",
     });

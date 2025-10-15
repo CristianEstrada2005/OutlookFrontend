@@ -13,7 +13,7 @@ export function PermissionsScreen({ onAccept }: PermissionsScreenProps) {
 
   // 🔍 Verifica si hay una sesión activa (usuario autenticado)
   useEffect(() => {
-    fetch("http://localhost:5000/session-check", { credentials: "include" })
+    fetch("http://outlookbackend.onrender.com/session-check", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {

@@ -69,7 +69,7 @@ export function CourseManagement({ onBack }: CourseManagementProps) {
       formData.append("files", file1.file!);
       formData.append("files", file2.file!);
 
-      const response = await fetch("http://localhost:5000/merge-files", {
+      const response = await fetch("http://outlookbackend.onrender.com/merge-files", {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -101,7 +101,7 @@ const handleDownloadCSV = () => {
   const fileName = cleanPath.split("/").pop() || "categoria.csv";
 
   const link = document.createElement("a");
-  link.href = `http://localhost:5000/${cleanPath}`;
+  link.href = `http://outlookbackend.onrender.com/${cleanPath}`;
   link.download = fileName;
   document.body.appendChild(link);
   link.click();
