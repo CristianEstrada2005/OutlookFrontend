@@ -9,7 +9,7 @@ export function LoginScreen() {
 
   // 🔍 Verifica si ya existe una sesión activa
   useEffect(() => {
-    fetch("http://outlookbackend.onrender.com/session-check", { credentials: "include" })
+    fetch("https://outlookbackend.onrender.com/session-check", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
