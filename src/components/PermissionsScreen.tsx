@@ -12,17 +12,43 @@ export function PermissionsScreen({ onAccept }: PermissionsScreenProps) {
   const [checking, setChecking] = useState(true);
 
   // 🔍 Verifica si hay una sesión activa (usuario autenticado)
-  useEffect(() => {
-    fetch("https://outlookbackend.onrender.com/session-check", { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.token) {
-          setSessionActive(true);
-        }
-      })
-      .catch((err) => console.error("Error comprobando sesión:", err))
-      .finally(() => setChecking(false));
-  }, []);
+ useEffect(() => {
+  const checkSession = async () => {
+    try {
+      const res = await fetch("https://outlookbackend.onrender.com/session-check", {
+        method: "GET",
+        credentials: "include", // 👈 envía cookies de sesión
+        headers: {
+          "Accept": "application/json",
+          "Cache-Control": "no-cache",
+        },
+      });
+
+      if (!res.ok) {
+        console.warn("⚠️ Respuesta inesperada del servidor:", res.status);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data?.token) {
+        setSessionActive(true);
+        console.log("✅ Sesión activa detectada en PermissionsScreen");
+      } else {
+        console.log("🚪 No hay sesión activa, redirigiendo...");
+        window.location.href = "/";
+      }
+    } catch (err) {
+      console.error("❌ Error comprobando sesión:", err);
+      window.location.href = "/";
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  checkSession();
+}, []);
+
 
   // 📦 Lista de permisos que la app requiere
   const permissions = [
