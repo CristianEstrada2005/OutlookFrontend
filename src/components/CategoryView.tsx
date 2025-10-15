@@ -41,7 +41,7 @@ export function CategoryView({ category, onBack }: CategoryViewProps) {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const res = await fetch("http://outlookbackend.onrender.com/contacts-by-category", {
+        const res = await fetch("https://outlookbackend.onrender.com/contacts-by-category", {
           credentials: "include",
         });
         if (res.ok) {

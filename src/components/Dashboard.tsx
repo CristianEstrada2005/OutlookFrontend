@@ -94,7 +94,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
   const handleLogout = async () => {
   try {
-    await fetch("http://outlookbackend.onrender.com/logout", {
+    await fetch("https://outlookbackend.onrender.com/logout", {
       method: "POST",
       credentials: "include",
     });

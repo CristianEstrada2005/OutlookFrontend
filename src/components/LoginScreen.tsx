@@ -23,7 +23,7 @@ export function LoginScreen() {
   // 🔑 Manejar clic de inicio de sesión
   const handleLoginClick = () => {
     setLoading(true);
-    window.location.href = "http://outlookbackend.onrender.com/auth/login";
+    window.location.href = "https://outlookbackend.onrender.com/auth/login";
   };
 
   // 🧭 Si ya hay sesión, puede redirigir a Dashboard (opcional)
